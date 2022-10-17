@@ -9,6 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/crypto/acme/autocert"
+
+	"github.com/smeans/blinkstory/internal/bsapi"
 )
 
 func main() {
@@ -21,7 +23,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.Static("/", "web");
+	e.Static("/", "web")
+	api := e.Group("/api")
+	bsapi.AddRoutes(api)
 
 
 	if _, err := os.Stat(".keys/server.key"); errors.Is(err, os.ErrNotExist) {

@@ -1,0 +1,157 @@
+<ph-components>
+    <template name="x-hbox">
+<style>
+:host {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+:host(.top) {
+    align-items: flex-start;
+}
+
+:host(.middle) {
+    align-items: center;
+}
+
+:host(.bottom) {
+    align-items: flex-end;
+}
+
+:host(.stretch) {
+    align-items: stretch;
+}
+
+:host(.left) {
+    justify-content: flex-start;
+}
+
+:host(.center) {
+    justify-content: center;
+}
+
+:host(.right) {
+    justify-content: flex-end;
+}
+
+:host(.space-around) {
+    justify-content: space-around;
+}
+
+:host(.space-between) {
+    justify-content: space-between;
+}
+
+:host(.space-evenly) {
+    justify-content: space-evenly;
+}
+</style>
+        <slot></slot>
+        <script>
+            class XHbox extends PhElement {
+
+            }
+        </script>
+    </template>
+
+    <template name="x-vbox">
+        <style>
+            :host {
+                display: flex;
+                flex-direction: column;
+            }
+
+            :host(.top) {
+                justify-content: flex-start;
+            }
+
+            :host(.middle) {
+                justify-content: center;
+            }
+
+            :host(.bottom) {
+                justify-content: flex-end;
+            }
+
+            :host(.stretch) {
+                align-items: stretch;
+            }
+
+            :host(.left) {
+                align-items: flex-start;
+            }
+
+            :host(.center) {
+                align-items: center;
+            }
+
+            :host(.right) {
+                align-items: flex-end;
+            }
+        </style>
+        <slot></slot>
+        <script>
+            class XVbox extends PhElement {
+
+            }
+        </script>
+    </template>
+
+    <template name="x-date">
+        <style>
+            :host {
+                display: inline-block;
+                white-space: nowrap;
+            }
+            slot {
+                display: none;
+            }
+        </style>
+        <slot></slot>
+        <div id="output"></div>
+        <script>
+            class XDate extends PhElement {
+                static mappedAttributes = {"data-datestyle": "dateStyle"};
+
+                constructor() {
+                    super();
+                    this.refresh();
+                }
+
+                connectedCallback() {
+                    let observer = new MutationObserver((mutations) => {
+                        this.refresh();
+                    });
+
+                    observer.observe(this, {childList: true});
+                }
+
+                get date() {
+                    return this._date || new Date(this.textContent);
+                }
+
+                set date(newDate) {
+                    this._date = newDate;
+
+                    this.refresh();
+                }
+
+                get dateStyle() {
+                    return this._dateStyle || 'long';
+                }
+
+                set dateStyle(newDateStyle) {
+                    this._dateStyle = newDateStyle;
+                    this.refresh();
+                }
+
+                refresh() {
+                    this.g.output.innerText = this.date.toLocaleDateString(undefined, {
+                        "dateStyle": this.dateStyle
+                    });
+                }
+            }
+        </script>
+    </template>
+</ph-components>
